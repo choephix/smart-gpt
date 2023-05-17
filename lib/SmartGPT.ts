@@ -28,7 +28,7 @@ export class SmartGPT {
       model: gpt_model,
       messages: messages,
       temperature: this.temperature,
-      n
+      n,
     });
     const response = completion.choices[0].message.content;
     const tokens = completion.usage.total_tokens;
@@ -50,13 +50,18 @@ export class SmartGPT {
     return answer_prompt;
   }
 
-  async initial_output(user_input: string, outputs: number) {
+  async initial_output(
+    user_input: string,
+    outputs: number,
+    onSingleResponseGotten?: (answer: string) => unknown
+  ) {
     const responses: string[] = [];
     const initial_prompt = `Question. ${user_input}\nAnswer: Let's work this out in a step by step way to be sure we have the right answer: `;
     for (let i = 0; i < outputs; i++) {
       const messages = [{ role: 'user', content: initial_prompt }];
       const response = await this.generation(gpt3, messages);
       responses.push(response);
+      onSingleResponseGotten?.(response)
     }
 
     return [responses, initial_prompt] as const;

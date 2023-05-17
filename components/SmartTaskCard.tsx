@@ -14,7 +14,7 @@ export function SmartTaskCard(props: { task: TaskStore }) {
         cardBody.scrollTop = cardBody.scrollHeight;
       }
     }
-  }, [task]);
+  }, [JSON.stringify(task)]);
 
   return (
     <div className='card with-border'>
