@@ -14,18 +14,18 @@ const gpt3 = 'gpt-3.5-turbo';
 const gpt4 = 'gpt-4';
 
 export class SmartGPT {
-  readonly token_counts = {} as Record<string, number>;
+  readonly tokenCounts = {} as Record<string, number>;
 
   temperature = 0.5;
 
-  async generation(gpt_model: string, messages: any[], n?: number) {
+  private async generateChatCompletion(gptModel: string, messages: any[], n?: number) {
     console.log(
-      `🍀 Asking ${gpt_model.toUpperCase()} at t° ${this.temperature}`,
+      `🍀 Asking ${gptModel.toUpperCase()} at t° ${this.temperature}`,
       messages
     );
 
     const { data: completion } = await openai.createChatCompletion({
-      model: gpt_model,
+      model: gptModel,
       messages: messages,
       temperature: this.temperature,
       n,
@@ -34,54 +34,54 @@ export class SmartGPT {
     const tokens = completion.usage.total_tokens;
 
     // update global token counts
-    if (isNaN(this.token_counts[gpt_model])) {
-      this.token_counts[gpt_model] = 0;
+    if (isNaN(this.tokenCounts[gptModel])) {
+      this.tokenCounts[gptModel] = 0;
     }
-    this.token_counts[gpt_model] += tokens;
+    this.tokenCounts[gptModel] += tokens;
 
     return response;
   }
 
-  concat_output(responses: string[]): string {
-    let answer_prompt = '';
+  concatenateResponses(responses: string[]): string {
+    let answerPrompt = '';
     for (let i = 0; i < responses.length; i++) {
-      answer_prompt += `Answer Option ${i + 1}: ${responses[i]}\n\n`;
+      answerPrompt += `Answer Option ${i + 1}: ${responses[i]}\n\n`;
     }
-    return answer_prompt;
+    return answerPrompt;
   }
 
-  async initial_output(
-    user_input: string,
+  async getInitialResponses(
+    userInput: string,
     outputs: number,
     onSingleResponseGotten?: (answer: string) => unknown
   ) {
     const responses: string[] = [];
-    const initial_prompt = `Question. ${user_input}\nAnswer: Let's work this out in a step by step way to be sure we have the right answer: `;
+    const initialPrompt = `Question. ${userInput}\nAnswer: Let's work this out in a step by step way to be sure we have the right answer: `;
     for (let i = 0; i < outputs; i++) {
-      const messages = [{ role: 'user', content: initial_prompt }];
-      const response = await this.generation(gpt3, messages);
+      const messages = [{ role: 'user', content: initialPrompt }];
+      const response = await this.generateChatCompletion(gpt3, messages);
       responses.push(response);
       onSingleResponseGotten?.(response)
     }
 
-    return [responses, initial_prompt] as const;
+    return [responses, initialPrompt] as const;
   }
 
-  async researcher(answers: string, initial_prompt: string, outputs: number) {
+  async getResearcherResponses(answers: string, initialPrompt: string, outputs: number) {
     const prompt = `You are a researcher tasked with investigating the ${outputs} response options provided. List the flaws and faulty logic of each answer option. Let's work this out in a step by step way to be sure we have all the errors:`;
 
     const messages = [
-      { role: 'user', content: initial_prompt },
+      { role: 'user', content: initialPrompt },
       { role: 'assistant', content: answers },
       { role: 'user', content: prompt },
     ];
-    const response = await this.generation(gpt3, messages);
+    const response = await this.generateChatCompletion(gpt3, messages);
     messages.push({ role: 'assistant', content: response });
 
     return messages;
   }
 
-  async resolver(
+  async getResolverResponse(
     messages: { role: string; content: string }[],
     outputs: number
   ) {
@@ -89,18 +89,18 @@ export class SmartGPT {
 
     messages.push({ role: 'user', content: prompt });
 
-    const response = await this.generation(gpt4, messages);
+    const response = await this.generateChatCompletion(gpt4, messages);
 
     console.log(`Resolved Response:\n${response}`);
 
     return response;
   }
 
-  async final_output(final_response: string) {
-    const prompt = `Based on the following response, extract out only the improved response and nothing else.  DO NOT include typical responses and the answer should only have the improved response: \n\n${final_response}`;
+  async getImprovedResponse(finalResponse: string) {
+    const prompt = `Based on the following response, extract out only the improved response and nothing else.  DO NOT include typical responses and the answer should only have the improved response: \n\n${finalResponse}`;
 
     const messages = [{ role: 'user', content: prompt }];
-    const response = await this.generation(gpt3, messages);
+    const response = await this.generateChatCompletion(gpt3, messages);
 
     console.log(`SmartGPT response: ${response}`);
 

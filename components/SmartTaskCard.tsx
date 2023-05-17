@@ -6,16 +6,6 @@ export function SmartTaskCard(props: { task: TaskStore }) {
   const { task } = props;
   const cardBodyRef = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    const cardBody = cardBodyRef.current;
-    if (cardBody) {
-      const shouldScrollToBottom = cardBody.scrollTop + cardBody.clientHeight === cardBody.scrollHeight;
-      if (shouldScrollToBottom) {
-        cardBody.scrollTop = cardBody.scrollHeight;
-      }
-    }
-  }, [JSON.stringify(task)]);
-
   return (
     <div className='card with-border'>
       <div className='card-header'>

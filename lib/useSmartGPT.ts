@@ -25,36 +25,36 @@ async function findThePerfectResult(smartGPT: SmartGPT, store: TaskStore) {
   store.status = 'Generating initial answers';
 
   [store.initial_responses, store.initial_prompt] =
-    await smartGPT.initial_output(
+    await smartGPT.getInitialResponses(
       store.question,
       store.outputs_count,
       (response) => store.initial_responses.push(response)
     );
 
-  const answers = smartGPT.concat_output(store.initial_responses);
+  const answers = smartGPT.concatenateResponses(store.initial_responses);
 
   store.status = `Researching answers: 2/4 complete`;
-  store.researcher_responses = await smartGPT.researcher(
+  store.researcher_responses = await smartGPT.getResearcherResponses(
     answers,
     store.initial_prompt,
     store.outputs_count
   );
 
   store.status = `Resolving answers: 3/4 complete`;
-  store.final_response = await smartGPT.resolver(
+  store.final_response = await smartGPT.getResolverResponse(
     store.researcher_responses,
     store.outputs_count
   );
-  store.perfect_result = await smartGPT.final_output(store.final_response);
+  store.perfect_result = await smartGPT.getImprovedResponse(store.final_response);
 
   // update tokens and calculate total cost
   const total_calc =
-    smartGPT.token_counts[gpt3] * rate_of_3 +
-    smartGPT.token_counts[gpt4] * rate_of_4;
+    smartGPT.tokenCounts[gpt3] * rate_of_3 +
+    smartGPT.tokenCounts[gpt4] * rate_of_4;
   const total_cost = `$${total_calc.toFixed(2)}`;
 
-  console.log(`You used ${smartGPT.token_counts[gpt3]} gpt3.5 tokens`);
-  console.log(`You used ${smartGPT.token_counts[gpt4]} gpt4 tokens`);
+  console.log(`You used ${smartGPT.tokenCounts[gpt3]} gpt3.5 tokens`);
+  console.log(`You used ${smartGPT.tokenCounts[gpt4]} gpt4 tokens`);
 
   store.status = `🎈 Ready! This query cost you ${total_cost}`;
   store.ongoing = false;
