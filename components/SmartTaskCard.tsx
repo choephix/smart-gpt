@@ -19,7 +19,7 @@ export function SmartTaskCard(props: { task: TaskStore }) {
     <div className="card with-border">
       <div className="card-header">
         <p className="card-question">{task.question}</p>
-        <code className="card-text">Status: {task.status}</code>
+        <code className="card-status card-text">Status: {task.status}</code>
       </div>
 
       <div className="card-body pretty-scrollbar" ref={cardBodyRef}>
