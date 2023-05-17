@@ -60,6 +60,11 @@ html,
     }
 
     .card {
+      margin-top: 20px;
+      width: 500px;
+      box-sizing: border-box;
+      background: white;
+
       p {
         padding: 0;
         margin: 0;
@@ -74,11 +79,6 @@ html,
         box-sizing: border-box;
       }
 
-      margin-top: 20px;
-      width: 500px;
-      box-sizing: border-box;
-      background: white;
-
       .card-header,
       .card-footer {
         width: 100%;
@@ -89,6 +89,13 @@ html,
       .card-question {
         font-style: italic;
         font-weight: bold;
+      }
+
+      .subcard {
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 1px solid #0004;
+        border-radius: 4px;
       }
 
       progress {
@@ -105,13 +112,13 @@ html,
 
 .pretty-scrollbar::-webkit-scrollbar-track {
   border-radius: 8px;
-  background-color: #e4e4e4;
-  border: 1px solid #d3d3d3;
+  background-color: #0000;
+  border: 1px solid #0004;
 }
 
 .pretty-scrollbar::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  border: 1px solid transparent;
   background-clip: content-box;
-  background-color: #f9f9f9;
+  background-color: #01010109;
+  border: 1px solid #0002;
 }

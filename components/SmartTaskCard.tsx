@@ -16,38 +16,38 @@ export function SmartTaskCard(props: { task: TaskStore }) {
 
       <div className="card-body pretty-scrollbar">
         <div className="initial-responses">
-          <h6 className="card-subtitle mb-2 text-muted">Initial Responses</h6>
+          <h5 className="card-subtitle mb-2 text-muted">Initial Responses</h5>
           {task.initial_responses.map((response, index) => (
-            <div key={index} className="initial-response">
+            <div key={index} className="initial-response subcard">
               {response}
             </div>
           ))}
         </div>
 
         <div className="initial-prompt">
-          <h6 className="card-subtitle mb-2 text-muted">Initial Prompt</h6>
-          <p className="card-text">{task.initial_prompt}</p>
+          <h5 className="card-subtitle mb-2 text-muted">Initial Prompt</h5>
+          <p className="card-text subcard">{task.initial_prompt}</p>
         </div>
 
         <div className="researcher-responses">
-          <h6 className="card-subtitle mb-2 text-muted">
+          <h5 className="card-subtitle mb-2 text-muted">
             Researcher Responses
-          </h6>
+          </h5>
           {task.researcher_responses.map((response, index) => (
-            <div key={index} className="researcher-response">
+            <div key={index} className="researcher-response subcard">
               <strong>{response.role}:</strong> {response.content}
             </div>
           ))}
         </div>
 
         <div className="final-response">
-          <h6 className="card-subtitle mb-2 text-muted">Final Response</h6>
-          <p className="card-text">{task.final_response}</p>
+          <h5 className="card-subtitle mb-2 text-muted">Final Response</h5>
+          <p className="card-text subcard">{task.final_response}</p>
         </div>
 
         <div className="perfect-result">
-          <h6 className="card-subtitle mb-2 text-muted">Perfect Result</h6>
-          <p className="card-text">{task.perfect_result}</p>
+          <h5 className="card-subtitle mb-2 text-muted">Perfect Result</h5>
+          <p className="card-text subcard">{task.perfect_result}</p>
         </div>
       </div>
 
