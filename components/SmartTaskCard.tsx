@@ -4,6 +4,17 @@ import { TaskStore } from '../lib/useSmartGPT';
 
 export function SmartTaskCard(props: { task: TaskStore }) {
   const { task } = props;
+  const cardBodyRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const cardBody = cardBodyRef.current;
+    if (cardBody) {
+      const shouldScrollToBottom = cardBody.scrollTop + cardBody.clientHeight === cardBody.scrollHeight;
+      if (shouldScrollToBottom) {
+        cardBody.scrollTop = cardBody.scrollHeight;
+      }
+    }
+  }, [task]);
 
   return (
     <div className='card with-border'>
@@ -14,7 +25,7 @@ export function SmartTaskCard(props: { task: TaskStore }) {
 
       <hr />
 
-      <div className='card-body pretty-scrollbar'>
+      <div className='card-body pretty-scrollbar' ref={cardBodyRef}>
         {task.initial_responses.length > 0 && (
           <div className='initial-responses'>
             <h5 className='card-subtitle mb-2 text-muted'>Initial Responses</h5>
