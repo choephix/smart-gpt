@@ -8,6 +8,7 @@ const rate_of_4 = 0.06 / 1000;
 function createTaskStore(question: string) {
   return {
     question,
+    outputs_count: 3,
     ongoing: true,
     status: 'Initializing...',
     initial_responses: [] as string[],
@@ -15,9 +16,45 @@ function createTaskStore(question: string) {
     researcher_responses: [] as { role: string; content: string }[],
     final_response: '',
     perfect_result: '',
+    error: null as Error | null,
   };
 }
 export type TaskStore = ReturnType<typeof createTaskStore>;
+
+async function findThePerfectResult(smartGPT: SmartGPT, store: TaskStore) {
+  store.status = 'Generating initial answers';
+
+  [store.initial_responses, store.initial_prompt] =
+    await smartGPT.initial_output(store.question, store.outputs_count);
+
+  const answers = smartGPT.concat_output(store.initial_responses);
+
+  store.status = `Researching answers: 2/4 complete`;
+  store.researcher_responses = await smartGPT.researcher(
+    answers,
+    store.initial_prompt,
+    store.outputs_count
+  );
+
+  store.status = `Resolving answers: 3/4 complete`;
+  store.final_response = await smartGPT.resolver(
+    store.researcher_responses,
+    store.outputs_count
+  );
+  store.perfect_result = await smartGPT.final_output(store.final_response);
+
+  // update tokens and calculate total cost
+  const total_calc =
+    smartGPT.token_counts[gpt3] * rate_of_3 +
+    smartGPT.token_counts[gpt4] * rate_of_4;
+  const total_cost = `$${total_calc.toFixed(2)}`;
+
+  console.log(`You used ${smartGPT.token_counts[gpt3]} gpt3.5 tokens`);
+  console.log(`You used ${smartGPT.token_counts[gpt4]} gpt4 tokens`);
+
+  store.status = `🎈 Ready! This query cost you ${total_cost}`;
+  store.ongoing = false;
+}
 
 export function useSmartGPT() {
   return {
@@ -27,11 +64,12 @@ export function useSmartGPT() {
       updateData: (updates: Partial<TaskStore>) => unknown,
       existingStore?: TaskStore
     ) {
-      const _store = existingStore ?? createTaskStore(userQuestionInput);
+      const smartGPT = new SmartGPT();
 
-      async function go() {
-        const smartGPT = new SmartGPT();
-        
+      const _store = existingStore ?? createTaskStore(userQuestionInput);
+      _store.outputs_count = numberOfAnswersToProcess;
+
+      async function main() {
         const store = new Proxy(_store, {
           set(target, property, value) {
             target[property] = value;
@@ -40,63 +78,16 @@ export function useSmartGPT() {
           },
         });
 
-        store.status = 'Generating initial answers';
-
-        [store.initial_responses, store.initial_prompt] =
-          await smartGPT.initial_output(userQuestionInput, numberOfAnswersToProcess);
-
-        const answers = smartGPT.concat_output(store.initial_responses);
-
-        store.status = `Researching answers: 2/4 complete`;
-        store.researcher_responses = await smartGPT.researcher(
-          answers,
-          store.initial_prompt,
-          numberOfAnswersToProcess
-        );
-
-        store.status = `Resolving answers: 3/4 complete`;
-        store.final_response = await smartGPT.resolver(
-          store.researcher_responses,
-          numberOfAnswersToProcess
-        );
-        store.perfect_result = await smartGPT.final_output(
-          store.final_response
-        );
-
-        // update tokens and calculate total cost
-        const total_calc =
-          smartGPT.token_counts[gpt3] * rate_of_3 +
-          smartGPT.token_counts[gpt4] * rate_of_4;
-        const total_cost = `$${total_calc.toFixed(2)}`;
-
-        console.log(`You used ${smartGPT.token_counts[gpt3]} gpt3.5 tokens`);
-        console.log(`You used ${smartGPT.token_counts[gpt4]} gpt4 tokens`);
-
-        store.status = `🎈 Ready! This query cost you ${total_cost}`;
-        store.ongoing = false;
+        try {
+          await findThePerfectResult(smartGPT, store);
+        } catch (error) {
+          store.error = error;
+        }
       }
 
-      setTimeout(go, 250);
+      setTimeout(main, 250);
 
       return _store;
     },
   };
 }
-
-async function fake(store: any) {
-  // function updateStore(updates: Partial<TaskStore>) {
-  //   Object.assign(_store, updates);
-  //   updateData(_store);
-  // }
-
-  await delay(1);
-  store.status = 'Uno';
-  await delay(1);
-  store.status = 'Dos';
-  await delay(1);
-  store.status = 'Tres!';
-  return;
-}
-
-const delay = (sec: number) =>
-  new Promise((done) => setTimeout(done, sec * 1000));

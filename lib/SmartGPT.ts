@@ -1,6 +1,6 @@
 /**
  * Ported from python from https://github.com/JarodMica/SmartGPT
- * 
+ *
  * Originally proposed by AI Explained here https://www.youtube.com/watch?v=wVzuvf9D9BU&t=0s
  */
 
@@ -18,11 +18,11 @@ export class SmartGPT {
 
   temperature = 0.5;
 
-  async generation(
-    gpt_model: string,
-    messages: any[]
-  ) {
-    console.log(`🍀 Asking ${gpt_model.toUpperCase()} at t° ${this.temperature}`, messages);
+  async generation(gpt_model: string, messages: any[]) {
+    console.log(
+      `🍀 Asking ${gpt_model.toUpperCase()} at t° ${this.temperature}`,
+      messages
+    );
 
     const { data: completion } = await openai.createChatCompletion({
       model: gpt_model,
@@ -49,10 +49,7 @@ export class SmartGPT {
     return answer_prompt;
   }
 
-  async initial_output(
-    user_input: string,
-    outputs: number
-  ) {
+  async initial_output(user_input: string, outputs: number) {
     const responses: string[] = [];
     const initial_prompt = `Question. ${user_input}\nAnswer: Let's work this out in a step by step way to be sure we have the right answer: `;
     for (let i = 0; i < outputs; i++) {
@@ -64,11 +61,7 @@ export class SmartGPT {
     return [responses, initial_prompt] as const;
   }
 
-  async researcher(
-    answers: string,
-    initial_prompt: string,
-    outputs: number
-  ) {
+  async researcher(answers: string, initial_prompt: string, outputs: number) {
     const prompt = `You are a researcher tasked with investigating the ${outputs} response options provided. List the flaws and faulty logic of each answer option. Let's work this out in a step by step way to be sure we have all the errors:`;
 
     const messages = [
