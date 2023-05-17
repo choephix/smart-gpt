@@ -16,7 +16,7 @@ function createTaskStore(question: string) {
     researcher_responses: [] as { role: string; content: string }[],
     final_response: '',
     perfect_result: '',
-    error: null as Error | null,
+    error: null as string | null,
   };
 }
 export type TaskStore = ReturnType<typeof createTaskStore>;
@@ -85,7 +85,7 @@ export function useSmartGPT(apiKey: string) {
         try {
           await findThePerfectResult(smartGPT, store);
         } catch (error) {
-          store.error = error;
+          store.error = error.message;
         }
       }
 

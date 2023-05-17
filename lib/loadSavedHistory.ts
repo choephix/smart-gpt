@@ -7,7 +7,7 @@ export function loadSavedHistory() {
   for (const task of savedHistory) {
     if (task.ongoing) {
       task.ongoing = false;
-      task.error = new Error(`Task was probably interrupted.`);
+      task.error = `Task was probably interrupted.`;
     }
   }
 

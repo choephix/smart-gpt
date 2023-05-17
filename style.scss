@@ -101,6 +101,23 @@ html,
           padding: 0;
           margin: 1em 0;
         }
+
+        &.error-state {
+          background: #ffd0d0;
+          color: rgb(175, 34, 34);
+          font-weight: bold;
+        }
+        &.ready-state {
+          background: #ecfff9;
+          color: rgb(21, 46, 34);
+        }
+      }
+
+      .card-header {
+        border-bottom: 1px solid #0004;
+      }
+      .card-footer {
+        border-top: 1px solid #0004;
       }
 
       .card-question {
@@ -113,10 +130,6 @@ html,
         margin-bottom: 5px;
         border: 1px solid #0004;
         border-radius: 4px;
-      }
-
-      .perfect-result .subcard {
-        color: rgb(0, 199, 123);
       }
 
       progress {

@@ -13,14 +13,14 @@ export function SmartTaskCard(props: { task: TaskStore }) {
     }
   }, [task]);
 
+  console.log(task);
+
   return (
     <div className="card with-border">
       <div className="card-header">
         <p className="card-question">{task.question}</p>
         <code className="card-text">Status: {task.status}</code>
       </div>
-
-      <hr />
 
       <div className="card-body pretty-scrollbar" ref={cardBodyRef}>
         {task.initial_responses.length > 0 && (
@@ -62,11 +62,15 @@ export function SmartTaskCard(props: { task: TaskStore }) {
         )}
       </div>
 
-      <hr />
-
-      <div className="card-footer">
+      <div
+        className={
+          'card-footer ' +
+          (task.error ? 'error' : task.ongoing ? 'ongoing' : 'ready') +
+          '-state'
+        }
+      >
         {task.error ? (
-          <p className="card-error">{String(task.error)}</p>
+          <h5 className="card-error">{task.error.toString()}</h5>
         ) : (
           <Fragment>
             {task.ongoing ? <progress id="working" /> : null}
