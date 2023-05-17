@@ -8,6 +8,8 @@ Originally proposed by **AI Explained** here ***https://www.youtube.com/watch?v=
  
 ## Usage
 
-Make sure to add your OpenAI API key to the browser's address bar 
+Make sure to add your OpenAI API key to the browser's address bar.
 
 *(e.g. `https://smart-gpt.stackblitz.io/?k=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`)*
+
+Having it work this way also means you can just bookmark the link it with the key included.
