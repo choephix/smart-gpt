@@ -48,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App pretty-scrollbar">
       <div className="Page">
         <hr />
 
