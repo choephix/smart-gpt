@@ -28,7 +28,7 @@ async function findThePerfectResult(smartGPT: SmartGPT, store: TaskStore) {
     await smartGPT.getInitialResponses(
       store.question,
       store.outputs_count,
-      (response) => store.initial_responses.push(response)
+      (response) => store.initial_responses = [...store.initial_responses, response]
     );
 
   const answers = smartGPT.concatenateResponses(store.initial_responses);
