@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, Fragment } from 'react';
-import { SimpleGPT } from '../lib/researchAndAnswerQuestion';
+import { SimpleGPT } from '../lib/SimpleGPT';
+import useOpenAIKey from '../lib/useApiKey';
 
 interface ConversationBeat {
   question: string;
@@ -8,8 +9,6 @@ interface ConversationBeat {
 }
 
 const savedHistory = localStorage.getItem('history_simple');
-
-const simpleGPT = new SimpleGPT();
 
 export default function App() {
   const [question, setQuestion] = useState('');
@@ -21,6 +20,9 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('history_simple', JSON.stringify(history));
   }, [history]);
+
+  const { apiKey } = useOpenAIKey();
+  const simpleGPT = new SimpleGPT(apiKey);
 
   const askQuestionTheRegularWay = async () => {
     setIsLoading(true);

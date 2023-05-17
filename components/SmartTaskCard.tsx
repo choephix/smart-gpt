@@ -1,12 +1,13 @@
-// SmartTaskCard.tsx
 import * as React from 'react';
+import { Fragment, useEffect, useRef } from 'react';
+
 import { TaskStore } from '../lib/useSmartGPT';
 
 export function SmartTaskCard(props: { task: TaskStore }) {
   const { task } = props;
-  const cardBodyRef = React.useRef<HTMLDivElement>(null);
+  const cardBodyRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (cardBodyRef.current !== null) {
       cardBodyRef.current.scrollTop = cardBodyRef.current.scrollHeight;
     }
@@ -64,12 +65,20 @@ export function SmartTaskCard(props: { task: TaskStore }) {
       <hr />
 
       <div className="card-footer">
-        {task.ongoing ? <progress id="working" /> : null}
-        {task.perfect_result && (
-          <div className="perfect-result">
-            <h5 className="card-subtitle mb-2 text-muted">Perfect Result</h5>
-            <p className="card-text subcard">{task.perfect_result}</p>
-          </div>
+        {task.error ? (
+          <p className="card-error">{String(task.error)}</p>
+        ) : (
+          <Fragment>
+            {task.ongoing ? <progress id="working" /> : null}
+            {task.perfect_result && (
+              <div className="perfect-result">
+                <h5 className="card-subtitle mb-2 text-muted">
+                  Perfect Result
+                </h5>
+                <p className="card-text subcard">{task.perfect_result}</p>
+              </div>
+            )}
+          </Fragment>
         )}
       </div>
     </div>
