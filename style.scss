@@ -12,7 +12,7 @@ html,
   background: #e3e6e9;
   overflow: auto;
   box-sizing: border-box;
-  
+
   .Page {
     padding: 100px 10px;
     display: flex;
@@ -86,6 +86,12 @@ html,
         width: 100%;
         padding: 10px;
         box-sizing: border-box;
+
+        h5 {
+          padding: 0;
+          margin: 0;
+          margin-bottom: .5em;
+        }
       }
 
       .card-question {
@@ -101,7 +107,8 @@ html,
       }
 
       .perfect-result .subcard {
-        color: rgb(0, 199, 123)
+        color: rgb(0, 199, 123);
+        font-weight: 500;
       }
 
       progress {
@@ -136,9 +143,8 @@ html,
   background-color: white;
 }
 
-
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   top: 0;
   left: 0;
