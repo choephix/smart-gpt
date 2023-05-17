@@ -22,11 +22,12 @@ export type TaskStore = ReturnType<typeof createTaskStore>;
 export function useSmartGPT() {
   return {
     askQuestion(
-      user_input: string,
-      updateData: (updates: Partial<TaskStore>) => unknown
+      userQuestionInput: string,
+      numberOfAnswersToProcess: number,
+      updateData: (updates: Partial<TaskStore>) => unknown,
+      existingStore?: TaskStore
     ) {
-      const outputs = 3;
-      const _store = createTaskStore(user_input);
+      const _store = existingStore ?? createTaskStore(userQuestionInput);
 
       async function go() {
         const smartGPT = new SmartGPT();
@@ -42,7 +43,7 @@ export function useSmartGPT() {
         store.status = 'Generating initial answers';
 
         [store.initial_responses, store.initial_prompt] =
-          await smartGPT.initial_output(user_input, outputs);
+          await smartGPT.initial_output(userQuestionInput, numberOfAnswersToProcess);
 
         const answers = smartGPT.concat_output(store.initial_responses);
 
@@ -50,13 +51,13 @@ export function useSmartGPT() {
         store.researcher_responses = await smartGPT.researcher(
           answers,
           store.initial_prompt,
-          outputs
+          numberOfAnswersToProcess
         );
 
         store.status = `Resolving answers: 3/4 complete`;
         store.final_response = await smartGPT.resolver(
           store.researcher_responses,
-          outputs
+          numberOfAnswersToProcess
         );
         store.perfect_result = await smartGPT.final_output(
           store.final_response

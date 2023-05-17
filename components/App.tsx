@@ -31,7 +31,7 @@ export default function App() {
     localStorage.setItem('history2', JSON.stringify(history2));
   }, [history, history2]);
 
-  const askQuestion = async () => {
+  const askQuestionTheRegularWay = async () => {
     setIsLoading(true);
     const answers = await researchAndAnswerQuestion(question);
     setHistory((prevHistory) => [{ question, answers }, ...prevHistory]);
@@ -39,8 +39,8 @@ export default function App() {
     setQuestion(''); // Reset the question input field
   };
 
-  const testSmartGPT = (question: string) => {
-    const store = smartGPT.askQuestion(question, (updates) => {
+  const askQuestionWithSmartGPT = (question: string) => {
+    const store = smartGPT.askQuestion(question, 3, (updates) => {
       Object.assign(store, updates);
       setHistory2((v) => [...v]);
     });
@@ -62,7 +62,7 @@ export default function App() {
 
         <button
           className="with-border"
-          onClick={() => testSmartGPT(question)}
+          onClick={() => askQuestionWithSmartGPT(question)}
           disabled={isLoading}
         >
           Ask SmartGPT
@@ -70,7 +70,7 @@ export default function App() {
         <hr />
         <button
           className="with-border"
-          onClick={askQuestion}
+          onClick={askQuestionTheRegularWay}
           disabled={isLoading}
         >
           Ask daVinci
