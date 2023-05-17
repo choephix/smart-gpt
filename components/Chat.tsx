@@ -3,24 +3,19 @@ import { useState, useEffect } from 'react';
 import { SmartTaskCard } from './SmartTaskCard';
 import { useSmartGPT } from '../lib/useSmartGPT';
 import useOpenAIKey from '../lib/useApiKey';
+import { loadSavedHistory } from '../lib/loadSavedHistory';
 
-const savedHistory = localStorage.getItem('history');
+const [savedHistory, setSavedHistory] = loadSavedHistory();
 
 export default function Chat() {
   const [question, setQuestion] = useState('');
-  
-  const [history, setHistory] = useState(
-    (JSON.parse(savedHistory) ?? []) as ReturnType<
-      typeof smartGPT.askQuestion
-    >[]
-  );
-  
+
+  const [history, setHistory] = useState(savedHistory);
+
   const { apiKey } = useOpenAIKey();
   const smartGPT = useSmartGPT(apiKey);
 
-  useEffect(() => {
-    localStorage.setItem('history', JSON.stringify(history));
-  }, [history]);
+  useEffect(() => setSavedHistory(history), [history]);
 
   const askQuestionWithSmartGPT = (question: string) => {
     const store = smartGPT.askQuestion(question, 3, (updates) => {
