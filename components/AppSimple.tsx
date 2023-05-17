@@ -7,7 +7,7 @@ interface ConversationBeat {
   answers: string[];
 }
 
-const savedHistory = localStorage.getItem('history');
+const savedHistory = localStorage.getItem('history_simple');
 
 const simpleGPT = new SimpleGPT();
 
@@ -19,7 +19,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    localStorage.setItem('history', JSON.stringify(history));
+    localStorage.setItem('history_simple', JSON.stringify(history));
   }, [history]);
 
   const askQuestionTheRegularWay = async () => {

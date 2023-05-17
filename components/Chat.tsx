@@ -4,7 +4,7 @@ import { SmartTaskCard } from './SmartTaskCard';
 import { useSmartGPT } from '../lib/useSmartGPT';
 import useOpenAIKey from '../lib/useApiKey';
 
-const savedHistory = localStorage.getItem('history2');
+const savedHistory = localStorage.getItem('history');
 
 export default function Chat() {
   const [question, setQuestion] = useState('');
@@ -19,7 +19,7 @@ export default function Chat() {
   const smartGPT = useSmartGPT(apiKey);
 
   useEffect(() => {
-    localStorage.setItem('history2', JSON.stringify(history));
+    localStorage.setItem('history', JSON.stringify(history));
   }, [history]);
 
   const askQuestionWithSmartGPT = (question: string) => {
