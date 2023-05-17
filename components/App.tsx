@@ -5,6 +5,6 @@ import Chat from './Chat';
 import KeyLessGate from './KeyLessGate';
 
 export default function App() {
-  const { apiKey } = useOpenAIKey();
-  return apiKey ? <Chat /> : <KeyLessGate />;
+  const { apiKey, saveApiKey } = useOpenAIKey();
+  return apiKey ? <Chat /> : <KeyLessGate saveApiKey={saveApiKey} />;
 }

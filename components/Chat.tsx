@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import { SmartTaskCard } from './SmartTaskCard';
 import { useSmartGPT } from '../lib/useSmartGPT';
 import useOpenAIKey from '../lib/useApiKey';

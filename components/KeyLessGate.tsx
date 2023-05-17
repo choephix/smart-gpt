@@ -1,11 +1,19 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useOpenAIKey from '../lib/useApiKey';
 
-export default function KeyLessGate() {
-  const { apiKey, saveApiKey } = useOpenAIKey();
+interface Props {
+  saveApiKey: (key: string) => void;
+}
+
+export default function KeyLessGate({ saveApiKey }: Props) {
+  const { apiKey } = useOpenAIKey();
 
   const [key, setKey] = useState(apiKey || '');
+
+  const handleSaveClick = () => {
+    saveApiKey(key);
+  };
 
   return (
     <div className="App pretty-scrollbar">
@@ -19,9 +27,9 @@ export default function KeyLessGate() {
 
         <button
           className="with-border"
-          onClick={() => saveApiKey(key)}
+          onClick={handleSaveClick}
         >
-          Save
+          Save to browser storage
         </button>
         <hr />
       </div>

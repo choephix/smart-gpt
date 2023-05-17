@@ -4,8 +4,8 @@ const useOpenAIKey = () => {
   const [apiKey, setApiKey] = useState<string | null>(null);
 
   const saveApiKey = (key: string) => {
-    setApiKey(key);
     localStorage.setItem('OPENAI_API_KEY', key);
+    setApiKey(key);
   };
 
   useEffect(() => {
