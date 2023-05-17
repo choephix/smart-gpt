@@ -60,7 +60,7 @@ async function findThePerfectResult(smartGPT: SmartGPT, store: TaskStore) {
   store.ongoing = false;
 }
 
-export function useSmartGPT() {
+export function useSmartGPT(apiKey: string) {
   return {
     askQuestion(
       userQuestionInput: string,
@@ -68,7 +68,7 @@ export function useSmartGPT() {
       updateData: (updates: Partial<TaskStore>) => unknown,
       existingStore?: TaskStore
     ) {
-      const smartGPT = new SmartGPT();
+      const smartGPT = new SmartGPT(apiKey);
 
       const _store = existingStore ?? createTaskStore(userQuestionInput);
       _store.outputs_count = numberOfAnswersToProcess;

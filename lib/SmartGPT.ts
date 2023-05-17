@@ -5,26 +5,33 @@
  */
 
 import { Configuration, OpenAIApi } from 'openai';
-import { OPENAI_API_KEY } from './OPENAI_API_KEY';
-
-const configuration = new Configuration({ apiKey: OPENAI_API_KEY });
-const openai = new OpenAIApi(configuration);
 
 const gpt3 = 'gpt-3.5-turbo';
 const gpt4 = 'gpt-4';
 
 export class SmartGPT {
+  private readonly openai: OpenAIApi;
+
   readonly tokenCounts = {} as Record<string, number>;
 
   temperature = 0.5;
 
-  private async generateChatCompletion(gptModel: string, messages: any[], n?: number) {
+  constructor(apiKey: string) {
+    const configuration = new Configuration({ apiKey });
+    this.openai = new OpenAIApi(configuration);
+  }
+
+  private async generateChatCompletion(
+    gptModel: string,
+    messages: any[],
+    n?: number
+  ) {
     console.log(
       `🍀 Asking ${gptModel.toUpperCase()} at t° ${this.temperature}`,
       messages
     );
 
-    const { data: completion } = await openai.createChatCompletion({
+    const { data: completion } = await this.openai.createChatCompletion({
       model: gptModel,
       messages: messages,
       temperature: this.temperature,
@@ -61,13 +68,17 @@ export class SmartGPT {
       const messages = [{ role: 'user', content: initialPrompt }];
       const response = await this.generateChatCompletion(gpt3, messages);
       responses.push(response);
-      onSingleResponseGotten?.(response)
+      onSingleResponseGotten?.(response);
     }
 
     return [responses, initialPrompt] as const;
   }
 
-  async getResearcherResponses(answers: string, initialPrompt: string, outputs: number) {
+  async getResearcherResponses(
+    answers: string,
+    initialPrompt: string,
+    outputs: number
+  ) {
     const prompt = `You are a researcher tasked with investigating the ${outputs} response options provided. List the flaws and faulty logic of each answer option. Let's work this out in a step by step way to be sure we have all the errors:`;
 
     const messages = [
