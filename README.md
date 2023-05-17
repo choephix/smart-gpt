@@ -4,5 +4,5 @@
 
 Ported from python from ***https://github.com/JarodMica/SmartGPT***
  
-Originally proposed by **AI Explained** here ***https://www.youtube.com/watch?v=wVzuvf9D9BU&t=0s***
+As proposed by **AI Explained** here ***https://www.youtube.com/watch?v=wVzuvf9D9BU&t=0s***
  
