@@ -18,7 +18,7 @@ export class SmartGPT {
 
   temperature = 0.5;
 
-  async generation(gpt_model: string, messages: any[]) {
+  async generation(gpt_model: string, messages: any[], n?: number) {
     console.log(
       `🍀 Asking ${gpt_model.toUpperCase()} at t° ${this.temperature}`,
       messages
@@ -28,6 +28,7 @@ export class SmartGPT {
       model: gpt_model,
       messages: messages,
       temperature: this.temperature,
+      n
     });
     const response = completion.choices[0].message.content;
     const tokens = completion.usage.total_tokens;
@@ -38,7 +39,7 @@ export class SmartGPT {
     }
     this.token_counts[gpt_model] += tokens;
 
-    return [response, tokens] as const;
+    return response;
   }
 
   concat_output(responses: string[]): string {
@@ -54,7 +55,7 @@ export class SmartGPT {
     const initial_prompt = `Question. ${user_input}\nAnswer: Let's work this out in a step by step way to be sure we have the right answer: `;
     for (let i = 0; i < outputs; i++) {
       const messages = [{ role: 'user', content: initial_prompt }];
-      const [response, tokens] = await this.generation(gpt3, messages);
+      const response = await this.generation(gpt3, messages);
       responses.push(response);
     }
 
@@ -69,7 +70,7 @@ export class SmartGPT {
       { role: 'assistant', content: answers },
       { role: 'user', content: prompt },
     ];
-    const [response, tokens] = await this.generation(gpt3, messages);
+    const response = await this.generation(gpt3, messages);
     messages.push({ role: 'assistant', content: response });
 
     return messages;
@@ -83,7 +84,7 @@ export class SmartGPT {
 
     messages.push({ role: 'user', content: prompt });
 
-    const [response, tokens] = await this.generation(gpt4, messages);
+    const response = await this.generation(gpt4, messages);
 
     console.log(`Resolved Response:\n${response}`);
 
@@ -94,7 +95,7 @@ export class SmartGPT {
     const prompt = `Based on the following response, extract out only the improved response and nothing else.  DO NOT include typical responses and the answer should only have the improved response: \n\n${final_response}`;
 
     const messages = [{ role: 'user', content: prompt }];
-    const [response, tokens] = await this.generation(gpt3, messages);
+    const response = await this.generation(gpt3, messages);
 
     console.log(`SmartGPT response: ${response}`);
 
