@@ -73,12 +73,13 @@ html,
       }
 
       .card-body {
-        max-height: 50vh;
+        max-height: 40vh;
         overflow: auto;
         white-space: pre-wrap;
         padding: 10px;
         margin: 5px;
         box-sizing: border-box;
+        font-size: .8em;
       }
 
       .card-header,
