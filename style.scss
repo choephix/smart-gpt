@@ -93,6 +93,7 @@ html,
       .card-footer {
         width: 100%;
         padding: 10px;
+        white-space: pre-wrap;
         box-sizing: border-box;
 
         h5,
@@ -116,7 +117,6 @@ html,
 
       .perfect-result .subcard {
         color: rgb(0, 199, 123);
-        font-weight: 500;
       }
 
       progress {
