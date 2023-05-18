@@ -1,14 +1,14 @@
 # Smart-GPT implementation for the browser
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/smart-gpt)
+[⚡️ Edit on StackBlitz](https://stackblitz.com/edit/smart-gpt)
 
 ---
 
-The majority of the business logic is ported over from ***https://github.com/JarodMica/SmartGPT*** 🌟
+🌟 The majority of the business logic is ported over from ***https://github.com/JarodMica/SmartGPT*** 
  
 ---
  
-An approach to getting quality answers from GPT3+4, as proposed by **AI Explained** here ***https://www.youtube.com/watch?v=wVzuvf9D9BU&t=0s***.
+💛 An approach to getting quality answers from GPT3+4, as proposed by **AI Explained** here ***https://www.youtube.com/watch?v=wVzuvf9D9BU&t=0s***.
  
 ---
 
