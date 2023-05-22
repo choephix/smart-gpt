@@ -28,24 +28,25 @@ export default function Chat() {
   return (
     <div className="App pretty-scrollbar">
       <div className="Page">
-        <textarea
-          className="with-border"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask a question..."
-        />
+        <div className="Column">
+          <textarea
+            className="with-border"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ask a question..."
+          />
 
-        <button
-          className="with-border"
-          onClick={() => askQuestionWithSmartGPT(question)}
-        >
-          Ask SmartGPT
-        </button>
-        <hr />
+          <button
+            className="with-border"
+            onClick={() => askQuestionWithSmartGPT(question)}
+          >
+            Ask SmartGPT
+          </button>
 
-        {history.map((task, i) => (
-          <SmartTaskCard key={i} task={task} />
-        ))}
+          {history.map((task, i) => (
+            <SmartTaskCard key={i} task={task} />
+          ))}
+        </div>
       </div>
     </div>
   );

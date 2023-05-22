@@ -15,6 +15,9 @@ export function SmartTaskCard(props: { task: TaskStore }) {
 
   console.log(task);
 
+  //const isPrePhase = (task.phase || 0) < 2;
+  const isPrePhase = false
+
   return (
     <div className="card with-border">
       <div className="card-header">
@@ -24,7 +27,7 @@ export function SmartTaskCard(props: { task: TaskStore }) {
         </code>
       </div>
 
-      {(task.phase || 0) < 2 ? null : (
+      {isPrePhase ? null : (
         <div className="card-body pretty-scrollbar" ref={cardBodyRef}>
           {task.initial_responses.length > 0 && (
             <div className="initial-responses">
